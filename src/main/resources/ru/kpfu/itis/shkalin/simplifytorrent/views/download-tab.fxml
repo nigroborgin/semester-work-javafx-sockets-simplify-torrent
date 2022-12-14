@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ru.kpfu.itis.shkalin.simplifytorrent.controller.DownloadTabController">
+    <top>
+        <ToolBar>
+            <Button onAction="#uploadButtonClicked" text="Upload your file"/>
+            <Button onAction="#playButtonClicked" text="Play"/>
+            <Button onAction="#pauseButtonClicked" text="Pause"/>
+            <Button onAction="#stopButtonClicked" text="Stop"/>
+            <Button visible="false" fx:id="deleteButton" onAction="#deleteButtonClicked" text="Delete from downloading list"/>
+        </ToolBar>
+    </top>
+
+    <center>
+        <TableView fx:id="tableView">
+            <columns>
+                <TableColumn fx:id="titleColumn" text="Title"/>
+                <TableColumn fx:id="fileSizeColumn" text="File size"/>
+                <TableColumn fx:id="progressColumn" text="Progress %"/>
+                <TableColumn fx:id="statusColumn" text="Status"/>
+                <TableColumn fx:id="downloadedColumn" text="Downloaded"/>
+                <TableColumn fx:id="uploadedColumn" text="Uploaded"/>
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>

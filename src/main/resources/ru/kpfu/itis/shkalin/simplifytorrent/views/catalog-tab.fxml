@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ru.kpfu.itis.shkalin.simplifytorrent.controller.CatalogTabController">
+    <top>
+        <ToolBar>
+            <Button onAction="#uploadButtonClicked" text="Upload your file"/>
+        </ToolBar>
+    </top>
+    <center>
+        <SplitPane dividerPositions="0.4">
+            <ListView minWidth="NaN" maxWidth="Infinity" minHeight="NaN" maxHeight="Infinity" fx:id="catalogListView"/>
+            <VBox visible="false" fx:id="catalogVBox">
+                <Label fx:id="catalogItemTitle"/>
+                <Label fx:id="catalogItemSize"/>
+                <Button onAction="#downloadButtonClicked" text="Download"/>
+            </VBox>
+        </SplitPane>
+    </center>
+</BorderPane>

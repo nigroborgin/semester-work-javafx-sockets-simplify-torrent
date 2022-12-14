@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+
+<TabPane tabClosingPolicy="UNAVAILABLE"
+         xmlns="http://javafx.com/javafx/11.0.2"
+         xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="ru.kpfu.itis.shkalin.simplifytorrent.controller.MainPageController">
+
+    <Tab text="Catalog">
+        <fx:include source="catalog-tab.fxml"/>
+    </Tab>
+
+    <Tab text="My files">
+        <fx:include source="local-files-tab.fxml"/>
+    </Tab>
+
+    <Tab text="Downloads">
+        <fx:include source="download-tab.fxml"/>
+    </Tab>
+
+</TabPane>
