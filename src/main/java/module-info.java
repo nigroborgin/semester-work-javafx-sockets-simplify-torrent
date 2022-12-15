@@ -4,6 +4,7 @@ module ru.kpfu.itis.shkalin.simplifytorrent {
     requires javafx.media;
     requires javafx.controls;
     requires javafx.fxml;
+    requires org.apache.commons.codec;
 
     opens ru.kpfu.itis.shkalin.simplifytorrent;
     opens ru.kpfu.itis.shkalin.simplifytorrent.controller;

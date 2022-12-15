@@ -12,10 +12,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ru.kpfu.itis.shkalin.simplifytorrent.dto.TorrentFileInfoDTO;
+import ru.kpfu.itis.shkalin.simplifytorrent.service.PathsFileService;
+import ru.kpfu.itis.shkalin.simplifytorrent.util.UploaderUtil;
 
 import java.io.File;
 import java.util.List;
-import java.util.Objects;
 
 public class DownloadTabController {
 
@@ -69,14 +70,7 @@ public class DownloadTabController {
     @FXML
     public void uploadButtonClicked() {
         System.out.println("Download Tab: UPLOAD button clicked");
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select file(s) for uploading");
-        List<File> list = fileChooser.showOpenMultipleDialog(new Stage());
-        if (list != null) {
-            for (File file : list) {
-                String pathToFile = file.getAbsolutePath();
-            }
-        }
+        UploaderUtil.getInstance().upload();
     }
 
     @FXML

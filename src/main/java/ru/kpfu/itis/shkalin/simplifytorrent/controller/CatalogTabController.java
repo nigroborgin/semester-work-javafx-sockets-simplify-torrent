@@ -9,12 +9,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
 import ru.kpfu.itis.shkalin.simplifytorrent.dto.MinFileInfoDTO;
-import ru.kpfu.itis.shkalin.simplifytorrent.service.CommunicationWithServerService;
+import ru.kpfu.itis.shkalin.simplifytorrent.service.ServerService;
+import ru.kpfu.itis.shkalin.simplifytorrent.util.UploaderUtil;
 
 public class CatalogTabController {
 
     public static ObservableList<MinFileInfoDTO> catalogFilesData = FXCollections.observableArrayList();
-    public CommunicationWithServerService communication = new CommunicationWithServerService();
+    public ServerService communication = ServerService.getInstance();
 
     @FXML
     public ListView<MinFileInfoDTO> catalogListView;
@@ -52,6 +53,7 @@ public class CatalogTabController {
     @FXML
     public void uploadButtonClicked() {
         System.out.println("Catalog Tab: UPLOAD button clicked");
+        UploaderUtil.getInstance().upload();
     }
 
     public CatalogTabController() {
