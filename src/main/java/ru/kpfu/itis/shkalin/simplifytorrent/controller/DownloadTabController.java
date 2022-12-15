@@ -9,14 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import ru.kpfu.itis.shkalin.simplifytorrent.dto.TorrentFileInfoDTO;
-import ru.kpfu.itis.shkalin.simplifytorrent.service.PathsFileService;
-import ru.kpfu.itis.shkalin.simplifytorrent.util.UploaderUtil;
-
-import java.io.File;
-import java.util.List;
+import ru.kpfu.itis.shkalin.simplifytorrent.service.FileInfoService;
 
 public class DownloadTabController {
 
@@ -70,7 +64,7 @@ public class DownloadTabController {
     @FXML
     public void uploadButtonClicked() {
         System.out.println("Download Tab: UPLOAD button clicked");
-        UploaderUtil.getInstance().upload();
+        FileInfoService.getInstance().upload();
     }
 
     @FXML

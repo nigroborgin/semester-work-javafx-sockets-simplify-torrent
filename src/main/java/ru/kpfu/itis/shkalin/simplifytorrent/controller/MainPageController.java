@@ -1,7 +1,6 @@
 package ru.kpfu.itis.shkalin.simplifytorrent.controller;
 
 import javafx.fxml.FXML;
-import ru.kpfu.itis.shkalin.simplifytorrent.util.UploaderUtil;
 
 public class MainPageController {
 
@@ -10,10 +9,5 @@ public class MainPageController {
     }
 
     public MainPageController() {
-    }
-
-    @FXML
-    public void uploadButtonClicked() {
-        UploaderUtil.getInstance().upload();
     }
 }
