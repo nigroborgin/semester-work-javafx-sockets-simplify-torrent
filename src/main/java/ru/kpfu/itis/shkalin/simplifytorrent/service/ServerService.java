@@ -1,6 +1,7 @@
 package ru.kpfu.itis.shkalin.simplifytorrent.service;
 
-import java.io.File;
+import ru.kpfu.itis.shkalin.simplifytorrent.model.Info;
+import ru.kpfu.itis.shkalin.simplifytorrent.model.Piece;
 
 public class ServerService {
     private static volatile ServerService instance;
@@ -21,18 +22,25 @@ public class ServerService {
     private ServerService() {
     }
 
-    public void head() {
-        Integer id;
+    public Info head() {
+        Info infoOfFile = null;
+
+        String hashMD5;
+        Integer pieceLength;
+        String piecesHashesSHA1;
+        Long fileLength;
         String title;
-        Integer fileSizeBytes;
+
+        return infoOfFile;
     }
 
-    public void get(Integer fileId) {
-        System.out.println("CommunicationWithServerService: get (id: " + fileId + ") file");
+    public void get(String fullFileHashMD5, Integer idPiece) {
+//        System.out.println("CommunicationWithServerService: get (id: " + fileId + ") file");
     }
 
-    public void post(File file) {
+    public void post(Piece piece) {
 
     }
+
 
 }
