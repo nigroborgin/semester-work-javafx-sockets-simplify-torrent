@@ -47,7 +47,7 @@ public class CatalogTabController {
     @FXML
     public void downloadButtonClicked() {
         System.out.println("Catalog Tab: DOWNLOAD button clicked");
-        communication.get(catalogListView.getSelectionModel().getSelectedItem().getId());
+//        communication.get(catalogListView.getSelectionModel().getSelectedItem().getId());
     }
 
     @FXML

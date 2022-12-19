@@ -2,7 +2,7 @@ package ru.kpfu.itis.shkalin.simplifytorrent.dto;
 
 import java.util.Objects;
 
-public class TorrentFileInfoDTO {
+public class DownloadingFileInfoDTO {
 
     private Integer id;
     private String title;
@@ -12,7 +12,7 @@ public class TorrentFileInfoDTO {
     private Integer downloadedBytes;
     private Integer uploadedBytes;
 
-    public TorrentFileInfoDTO(Integer id, String title, Integer fileSizeBytes, Integer progress, String status, Integer downloadedBytes, Integer uploadedBytes) {
+    public DownloadingFileInfoDTO(Integer id, String title, Integer fileSizeBytes, Integer progress, String status, Integer downloadedBytes, Integer uploadedBytes) {
         this.id = id;
         this.title = title;
         this.fileSizeBytes = fileSizeBytes;
@@ -22,7 +22,7 @@ public class TorrentFileInfoDTO {
         this.uploadedBytes = uploadedBytes;
     }
 
-    public TorrentFileInfoDTO() {
+    public DownloadingFileInfoDTO() {
     }
 
     public Integer getId() {
@@ -84,8 +84,8 @@ public class TorrentFileInfoDTO {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TorrentFileInfoDTO)) return false;
-        TorrentFileInfoDTO that = (TorrentFileInfoDTO) o;
+        if (!(o instanceof DownloadingFileInfoDTO)) return false;
+        DownloadingFileInfoDTO that = (DownloadingFileInfoDTO) o;
         return Objects.equals(title, that.title) && Objects.equals(fileSizeBytes, that.fileSizeBytes) && Objects.equals(progress, that.progress) && Objects.equals(status, that.status) && Objects.equals(downloadedBytes, that.downloadedBytes) && Objects.equals(uploadedBytes, that.uploadedBytes);
     }
 

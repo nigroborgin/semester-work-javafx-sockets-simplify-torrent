@@ -7,15 +7,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
-import ru.kpfu.itis.shkalin.simplifytorrent.model.FileInfo;
+import ru.kpfu.itis.shkalin.simplifytorrent.dto.LocalFileInfoDTO;
 import ru.kpfu.itis.shkalin.simplifytorrent.service.FileInfoService;
 
 public class LocalFilesTabController {
 
-    public ObservableList<FileInfo> localFilesData;
+    public ObservableList<LocalFileInfoDTO> localFilesData;
 
     @FXML
-    public ListView<FileInfo> localFilesListView;
+    public ListView<LocalFileInfoDTO> localFilesListView;
     @FXML
     public Label localFilesItemTitle;
     @FXML
@@ -30,7 +30,7 @@ public class LocalFilesTabController {
         localFilesListView.setItems(localFilesData);
         localFilesListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<>() {
             @Override
-            public void changed(ObservableValue<? extends FileInfo> observable, FileInfo oldValue, FileInfo newValue) {
+            public void changed(ObservableValue<? extends LocalFileInfoDTO> observable, LocalFileInfoDTO oldValue, LocalFileInfoDTO newValue) {
                 if (localFilesListView.getSelectionModel().getSelectedItem() != null) {
                     localFilesItemTitle.setText(localFilesListView.getSelectionModel().getSelectedItem().getTitle());
                     localFilesItemSize.setText(localFilesListView.getSelectionModel().getSelectedItem().getFileSizeBytes().toString());

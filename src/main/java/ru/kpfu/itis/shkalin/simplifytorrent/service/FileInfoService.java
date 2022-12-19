@@ -4,7 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import ru.kpfu.itis.shkalin.simplifytorrent.model.FileInfo;
+import ru.kpfu.itis.shkalin.simplifytorrent.dto.LocalFileInfoDTO;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -14,7 +14,7 @@ import java.util.List;
 public class FileInfoService {
 
     private static volatile FileInfoService instance;
-    private ObservableList<FileInfo> localFilesList;
+    private ObservableList<LocalFileInfoDTO> localFilesList;
 
     private FileInfoService() {
         localFilesList = FXCollections.observableArrayList();
@@ -34,7 +34,7 @@ public class FileInfoService {
         return localInstance;
     }
 
-    public ObservableList<FileInfo> getLocalFilesList() {
+    public ObservableList<LocalFileInfoDTO> getLocalFilesList() {
         return localFilesList;
     }
 
@@ -57,7 +57,7 @@ public class FileInfoService {
             String filePath = file.getAbsolutePath();
             inputStream.close();
 
-            localFilesList.add(new FileInfo(hashMD5, title, fileSizeBytes, filePath));
+            localFilesList.add(new LocalFileInfoDTO(hashMD5, title, fileSizeBytes, filePath));
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("target/classes/ru/kpfu/itis/shkalin/simplifytorrent/paths-to-uploading-files.csv", true));
             bufferedWriter.append("\"")
                     .append(hashMD5).append("\",\"")
@@ -79,11 +79,11 @@ public class FileInfoService {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 String[] splitLine = line.substring(1, line.length() - 1).split("\",\"");
-                FileInfo fileInfo = new FileInfo();
+                LocalFileInfoDTO fileInfo = new LocalFileInfoDTO();
                 fileInfo.setFileHash(splitLine[0]);
                 fileInfo.setTitle(splitLine[1]);
                 fileInfo.setFileSizeBytes(Long.parseLong(splitLine[2]));
-                fileInfo.setFilePath(splitLine[3]);
+                fileInfo.setFileLocalPath(splitLine[3]);
                 localFilesList.add(fileInfo);
             }
             bufferedReader.close();

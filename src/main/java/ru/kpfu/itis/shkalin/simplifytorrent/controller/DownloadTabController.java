@@ -9,27 +9,27 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import ru.kpfu.itis.shkalin.simplifytorrent.dto.TorrentFileInfoDTO;
+import ru.kpfu.itis.shkalin.simplifytorrent.dto.DownloadingFileInfoDTO;
 import ru.kpfu.itis.shkalin.simplifytorrent.service.FileInfoService;
 
 public class DownloadTabController {
 
-    public static ObservableList<TorrentFileInfoDTO> downloadsFilesData = FXCollections.observableArrayList();
+    public static ObservableList<DownloadingFileInfoDTO> downloadsFilesData = FXCollections.observableArrayList();
 
     @FXML
-    public TableView<TorrentFileInfoDTO> tableView;
+    public TableView<DownloadingFileInfoDTO> tableView;
     @FXML
-    public TableColumn<TorrentFileInfoDTO, String> titleColumn;
+    public TableColumn<DownloadingFileInfoDTO, String> titleColumn;
     @FXML
-    public TableColumn<TorrentFileInfoDTO, Integer> fileSizeColumn;
+    public TableColumn<DownloadingFileInfoDTO, Integer> fileSizeColumn;
     @FXML
-    public TableColumn<TorrentFileInfoDTO, Integer> progressColumn;
+    public TableColumn<DownloadingFileInfoDTO, Integer> progressColumn;
     @FXML
-    public TableColumn<TorrentFileInfoDTO, String> statusColumn;
+    public TableColumn<DownloadingFileInfoDTO, String> statusColumn;
     @FXML
-    public TableColumn<TorrentFileInfoDTO, Integer> downloadedColumn;
+    public TableColumn<DownloadingFileInfoDTO, Integer> downloadedColumn;
     @FXML
-    public TableColumn<TorrentFileInfoDTO, Integer> uploadedColumn;
+    public TableColumn<DownloadingFileInfoDTO, Integer> uploadedColumn;
     @FXML
     public Button deleteButton;
 
@@ -42,13 +42,13 @@ public class DownloadTabController {
         downloadedColumn.setCellValueFactory(new PropertyValueFactory<>("downloadedBytes"));
         uploadedColumn.setCellValueFactory(new PropertyValueFactory<>("uploadedBytes"));
 
-        downloadsFilesData.add(new TorrentFileInfoDTO(1,"Пиратский Варкрафт", 24000, 62, "downloading", 15000, 1000));
-        downloadsFilesData.add(new TorrentFileInfoDTO(2, "no man's sky pirates", 24000, 100, "uploading", 24000, 16000));
-        downloadsFilesData.add(new TorrentFileInfoDTO(3, "Властелин колец 1 !!!", 10000, 35, "downloading", 3500, 1000));
+        downloadsFilesData.add(new DownloadingFileInfoDTO(1,"Пиратский Варкрафт", 24000, 62, "downloading", 15000, 1000));
+        downloadsFilesData.add(new DownloadingFileInfoDTO(2, "no man's sky pirates", 24000, 100, "uploading", 24000, 16000));
+        downloadsFilesData.add(new DownloadingFileInfoDTO(3, "Властелин колец 1 !!!", 10000, 35, "downloading", 3500, 1000));
 
         tableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<>() {
             @Override
-            public void changed(ObservableValue<? extends TorrentFileInfoDTO> observable, TorrentFileInfoDTO oldValue, TorrentFileInfoDTO newValue) {
+            public void changed(ObservableValue<? extends DownloadingFileInfoDTO> observable, DownloadingFileInfoDTO oldValue, DownloadingFileInfoDTO newValue) {
                 if (tableView.getSelectionModel().getSelectedItem().getStatus().equals("downloading")) {
                     deleteButton.setText("Cancel download");
                 } else if (tableView.getSelectionModel().getSelectedItem().getStatus().equals("uploading")) {
