@@ -9,12 +9,12 @@ module ru.kpfu.itis.shkalin.simplifytorrent {
     opens ru.kpfu.itis.shkalin.simplifytorrent;
     opens ru.kpfu.itis.shkalin.simplifytorrent.controller;
     opens ru.kpfu.itis.shkalin.simplifytorrent.dto;
-    opens ru.kpfu.itis.shkalin.simplifytorrent.model;
+    opens ru.kpfu.itis.shkalin.simplifytorrent.entity;
     opens ru.kpfu.itis.shkalin.simplifytorrent.service;
 
     exports ru.kpfu.itis.shkalin.simplifytorrent;
     exports ru.kpfu.itis.shkalin.simplifytorrent.controller;
     exports ru.kpfu.itis.shkalin.simplifytorrent.dto;
-    exports ru.kpfu.itis.shkalin.simplifytorrent.model;
+    exports ru.kpfu.itis.shkalin.simplifytorrent.entity;
     exports ru.kpfu.itis.shkalin.simplifytorrent.service;
 }

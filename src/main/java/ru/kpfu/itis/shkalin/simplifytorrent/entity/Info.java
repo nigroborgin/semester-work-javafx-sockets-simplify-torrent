@@ -1,4 +1,4 @@
-package ru.kpfu.itis.shkalin.simplifytorrent.model;
+package ru.kpfu.itis.shkalin.simplifytorrent.entity;
 
 public class Info {
     private String hashMD5;

@@ -1,7 +1,7 @@
 package ru.kpfu.itis.shkalin.simplifytorrent.service;
 
-import ru.kpfu.itis.shkalin.simplifytorrent.model.Info;
-import ru.kpfu.itis.shkalin.simplifytorrent.model.Piece;
+import ru.kpfu.itis.shkalin.simplifytorrent.entity.Info;
+import ru.kpfu.itis.shkalin.simplifytorrent.entity.Piece;
 
 public class ServerService {
     private static volatile ServerService instance;

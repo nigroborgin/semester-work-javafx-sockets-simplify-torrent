@@ -1,4 +1,4 @@
-package ru.kpfu.itis.shkalin.simplifytorrent.model;
+package ru.kpfu.itis.shkalin.simplifytorrent.entity;
 
 public class Piece {
     private Integer id;
