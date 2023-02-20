@@ -12,6 +12,10 @@ public class DownloadingFileInfoDTO {
     private Integer downloadedBytes;
     private Integer uploadedBytes;
 
+    public DownloadingFileInfoDTO() {
+
+    }
+
     public DownloadingFileInfoDTO(Integer id, String title, Integer fileSizeBytes, Integer progress, String status, Integer downloadedBytes, Integer uploadedBytes) {
         this.id = id;
         this.title = title;
@@ -20,9 +24,6 @@ public class DownloadingFileInfoDTO {
         this.status = status;
         this.downloadedBytes = downloadedBytes;
         this.uploadedBytes = uploadedBytes;
-    }
-
-    public DownloadingFileInfoDTO() {
     }
 
     public Integer getId() {

@@ -3,25 +3,26 @@ package ru.kpfu.itis.shkalin.simplifytorrent.dto;
 import java.util.Objects;
 
 public class MinFileInfoDTO {
-    private Integer id;
+
+    private String hashMD5;
     private String title;
-    private Integer fileSizeBytes;
+    private Long fileLength;
 
     public MinFileInfoDTO() {
     }
 
-    public MinFileInfoDTO(Integer id, String title, Integer fileSizeBytes) {
-        this.id = id;
+    public MinFileInfoDTO(String hashMD5, String title, Long fileLength) {
+        this.hashMD5 = hashMD5;
         this.title = title;
-        this.fileSizeBytes = fileSizeBytes;
+        this.fileLength = fileLength;
     }
 
-    public Integer getId() {
-        return id;
+    public String getHashMD5() {
+        return hashMD5;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setHashMD5(String hashMD5) {
+        this.hashMD5 = hashMD5;
     }
 
     public String getTitle() {
@@ -32,12 +33,12 @@ public class MinFileInfoDTO {
         this.title = title;
     }
 
-    public Integer getFileSizeBytes() {
-        return fileSizeBytes;
+    public Long getFileLength() {
+        return fileLength;
     }
 
-    public void setFileSizeBytes(Integer fileSizeBytes) {
-        this.fileSizeBytes = fileSizeBytes;
+    public void setFileLength(Long fileLength) {
+        this.fileLength = fileLength;
     }
 
     @Override
@@ -45,12 +46,12 @@ public class MinFileInfoDTO {
         if (this == o) return true;
         if (!(o instanceof MinFileInfoDTO)) return false;
         MinFileInfoDTO that = (MinFileInfoDTO) o;
-        return Objects.equals(title, that.title) && Objects.equals(fileSizeBytes, that.fileSizeBytes);
+        return Objects.equals(hashMD5, that.hashMD5) && Objects.equals(title, that.title) && Objects.equals(fileLength, that.fileLength);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, fileSizeBytes);
+        return Objects.hash(hashMD5, title, fileLength);
     }
 
     @Override
