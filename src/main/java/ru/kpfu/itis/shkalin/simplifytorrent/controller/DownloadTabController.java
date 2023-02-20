@@ -9,8 +9,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import ru.kpfu.itis.shkalin.simplifytorrent.AppContext;
 import ru.kpfu.itis.shkalin.simplifytorrent.dto.DownloadingFileInfoDTO;
-import ru.kpfu.itis.shkalin.simplifytorrent.service.FileInfoService;
+import ru.kpfu.itis.shkalin.simplifytorrent.dto.LocalFileInfoDTO;
+import ru.kpfu.itis.shkalin.simplifytorrent.protocol.ClientException;
+import ru.kpfu.itis.shkalin.simplifytorrent.service.LocalFileService;
+import ru.kpfu.itis.shkalin.simplifytorrent.service.UploadService;
+
+import java.util.List;
 
 public class DownloadTabController {
 
@@ -42,7 +48,7 @@ public class DownloadTabController {
         downloadedColumn.setCellValueFactory(new PropertyValueFactory<>("downloadedBytes"));
         uploadedColumn.setCellValueFactory(new PropertyValueFactory<>("uploadedBytes"));
 
-        downloadsFilesData.add(new DownloadingFileInfoDTO(1,"Пиратский Варкрафт", 24000, 62, "downloading", 15000, 1000));
+        downloadsFilesData.add(new DownloadingFileInfoDTO(1, "Пиратский Варкрафт", 24000, 62, "downloading", 15000, 1000));
         downloadsFilesData.add(new DownloadingFileInfoDTO(2, "no man's sky pirates", 24000, 100, "uploading", 24000, 16000));
         downloadsFilesData.add(new DownloadingFileInfoDTO(3, "Властелин колец 1 !!!", 10000, 35, "downloading", 3500, 1000));
 
@@ -62,9 +68,14 @@ public class DownloadTabController {
     }
 
     @FXML
-    public void uploadButtonClicked() {
+    public void uploadButtonClicked() throws ClientException {
         System.out.println("Download Tab: UPLOAD button clicked");
-        FileInfoService.getInstance().upload();
+        List<LocalFileInfoDTO> additionalFilesList =
+                ((LocalFileService) AppContext.getInstance().get("localFileService"))
+                        .addFiles();
+
+        ((UploadService) AppContext.getInstance().get("uploadService"))
+                .uploadCatalog(additionalFilesList);
     }
 
     @FXML
