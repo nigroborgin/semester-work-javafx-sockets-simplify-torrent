@@ -63,7 +63,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                ru.kpfu.itis.shkalin.simplifytorrent/ru.kpfu.itis.shkalin.simplifytorrent.App
+                                ru.kpfu.itis.shkalin.simplifytorrent/ru.kpfu.itis.shkalin.simplifytorrent.AppClient
                             </mainClass>
                         </configuration>
                     </execution>
