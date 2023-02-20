@@ -6,13 +6,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import ru.kpfu.itis.shkalin.simplifytorrent.protocol.Client;
 
+import java.net.InetAddress;
 import java.net.URL;
 
 
-public class App extends Application {
+public class AppClient extends Application {
+
     @Override
     public void start(Stage primaryStage) throws Exception {
+        AppContext.getInstance().init();
 
 //        primaryStage.setMinWidth(700);
         primaryStage.getIcons().add(new Image("/ru/kpfu/itis/shkalin/simplifytorrent/icon.png"));
