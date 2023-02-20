@@ -3,21 +3,22 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+<BorderPane xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ru.kpfu.itis.shkalin.simplifytorrent.controller.CatalogTabController">
     <top>
         <ToolBar>
             <Button onAction="#uploadButtonClicked" text="Upload your file"/>
+            <Button onAction="#updateCatalogButtonClicked" text="Update catalog"/>
         </ToolBar>
     </top>
     <center>
-        <SplitPane dividerPositions="0.4">
-            <ListView minWidth="NaN" maxWidth="Infinity" minHeight="NaN" maxHeight="Infinity" fx:id="catalogListView"/>
-            <VBox visible="false" fx:id="catalogVBox">
+        <SplitPane>
+            <ListView fx:id="catalogListView" maxHeight="Infinity" maxWidth="Infinity" minHeight="NaN" minWidth="NaN"/>
+            <VBox fx:id="catalogVBox" visible="false">
                 <Label fx:id="catalogItemTitle"/>
                 <Label fx:id="catalogItemSize"/>
                 <Button onAction="#downloadButtonClicked" text="Download"/>
+                <Label fx:id="catalogItemStatus" BorderPane.alignment="CENTER"/>
             </VBox>
         </SplitPane>
     </center>
