@@ -1,4 +1,4 @@
-module ru.kpfu.itis.shkalin.simplifytorrent {
+module client {
 
     requires javafx.base;
     requires javafx.media;

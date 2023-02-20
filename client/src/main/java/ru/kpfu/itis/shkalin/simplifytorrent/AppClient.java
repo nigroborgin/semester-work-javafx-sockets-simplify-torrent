@@ -6,9 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import ru.kpfu.itis.shkalin.simplifytorrent.protocol.Client;
 
-import java.net.InetAddress;
 import java.net.URL;
 
 
