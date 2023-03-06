@@ -1,6 +1,6 @@
 package ru.kpfu.itis.shkalin.simplifytorrent.protocol;
 
-import ru.kpfu.itis.shkalin.simplifytorrent.entity.Catalog;
+import ru.kpfu.itis.shkalin.simplifytorrent.structure.Catalog;
 
 import java.io.*;
 import java.net.Socket;

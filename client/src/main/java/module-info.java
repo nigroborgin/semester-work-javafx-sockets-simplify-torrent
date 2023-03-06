@@ -15,6 +15,7 @@ module client {
     opens ru.kpfu.itis.shkalin.simplifytorrent.protocol.message;
     opens ru.kpfu.itis.shkalin.simplifytorrent.protocol.message.fields;
     opens ru.kpfu.itis.shkalin.simplifytorrent.protocol.message.exception;
+    opens ru.kpfu.itis.shkalin.simplifytorrent.protocol.exception;
 
     exports ru.kpfu.itis.shkalin.simplifytorrent;
     exports ru.kpfu.itis.shkalin.simplifytorrent.controller;
@@ -25,5 +26,8 @@ module client {
     exports ru.kpfu.itis.shkalin.simplifytorrent.protocol.message;
     exports ru.kpfu.itis.shkalin.simplifytorrent.protocol.message.fields;
     exports ru.kpfu.itis.shkalin.simplifytorrent.protocol.message.exception;
+    exports ru.kpfu.itis.shkalin.simplifytorrent.protocol.exception;
+    exports ru.kpfu.itis.shkalin.simplifytorrent.structure;
+    opens ru.kpfu.itis.shkalin.simplifytorrent.structure;
 
 }

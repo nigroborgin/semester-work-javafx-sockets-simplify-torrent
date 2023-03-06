@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 
 public class AppClient extends Application {

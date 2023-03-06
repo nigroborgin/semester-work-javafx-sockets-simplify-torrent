@@ -1,4 +1,4 @@
-package ru.kpfu.itis.shkalin.simplifytorrent.protocol;
+package ru.kpfu.itis.shkalin.simplifytorrent.protocol.exception;
 
 public class ClientException extends Exception {
 

@@ -1,8 +1,16 @@
 package ru.kpfu.itis.shkalin.simplifytorrent.protocol;
 
+import javafx.util.Pair;
+import ru.kpfu.itis.shkalin.simplifytorrent.listener.CatalogClientEventListener;
+import ru.kpfu.itis.shkalin.simplifytorrent.listener.ClientEventListener;
+import ru.kpfu.itis.shkalin.simplifytorrent.listener.InfoClientEventListener;
+import ru.kpfu.itis.shkalin.simplifytorrent.listener.PieceClientEventListener;
+import ru.kpfu.itis.shkalin.simplifytorrent.protocol.exception.ClientException;
 import ru.kpfu.itis.shkalin.simplifytorrent.protocol.message.Message;
 import ru.kpfu.itis.shkalin.simplifytorrent.protocol.message.MessageManager;
 import ru.kpfu.itis.shkalin.simplifytorrent.protocol.message.fields.MessageType;
+import ru.kpfu.itis.shkalin.simplifytorrent.structure.DoFuture;
+import ru.kpfu.itis.shkalin.simplifytorrent.structure.WaitReceiveMessageList;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -20,15 +28,16 @@ public class Client {
     private OutputStream outputStream;
     private InputStream inputStream;
     private ClientSender clientSender;
-    private ClientAccepter clientAccepter;
+    private ClientReceiver clientReceiver;
     private Queue<Message> waitSendQueue;
-    private List<Message> waitAcceptList;
+    private WaitReceiveMessageList waitReceiveList;
+
 
     public Client(InetAddress address, int port) {
         this.address = address;
         this.port = port;
         this.waitSendQueue = new ArrayDeque<>();
-        this.waitAcceptList = new ArrayList<>();
+        this.waitReceiveList = new WaitReceiveMessageList();
     }
 
     public void startClient() throws ClientException {
@@ -42,9 +51,12 @@ public class Client {
         }
 
         clientSender = new ClientSender();
-        clientAccepter = new ClientAccepter();
+        clientSender.setName("SENDER-THREAD");
+        clientReceiver = new ClientReceiver();
+        clientReceiver.setName("RECEIVER-THREAD");
         clientSender.start();
-        clientAccepter.start();
+        clientReceiver.start();
+        return;
     }
 
     private class ClientSender extends Thread {
@@ -77,43 +89,74 @@ public class Client {
 
     }
 
-    private class ClientAccepter extends Thread {
+    private class ClientReceiver extends Thread {
+        private List<ClientEventListener> listeners;
         private MessageManager messageManager;
 
         @Override
         public void run() {
+            listeners = new ArrayList<>();
+            this.registerListener(new CatalogClientEventListener());
+            this.registerListener(new InfoClientEventListener());
+            this.registerListener(new PieceClientEventListener());
             this.messageManager = new MessageManager();
 
             while (!socket.isClosed()) {
                 if (!waitSendQueue.isEmpty()) {
                     try {
-                        Message message = acceptMessage();
-                        // TODO: for(listeners)...
+                        Message message = receiveMessage();
+                        for (int i = 0; i < listeners.size(); i++) {
+                            listeners.get(i).handle(message);
+                        }
+                    } catch (ClassCastException ignored) {
+
                     } catch (ClientException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             }
         }
 
-        public Message acceptMessage() throws ClientException {
+        public Message receiveMessage() throws ClientException {
             try {
                 Message message = messageManager.readMessage(inputStream);
-                System.out.println("acceptMessage: \n" + message);
+                System.out.println("receiveMessage: \n" + message);
                 return message;
             } catch (IOException | ClassNotFoundException e) {
-                throw new ClientException("Error when accepted the message", e);
+                throw new ClientException("Error when receive the message", e);
             }
         }
 
+        public void registerListener(ClientEventListener listener) {
+            listener.init();
+            this.listeners.add(listener);
+        }
     }
 
-    public void addForSend(Message message) {
-        // TODO: сделать if REQ --> добавление сообщения в структуру ждунов приёма сообщений
+    public void send(Message message, DoFuture<?> willDoFuture) {
+        boolean itWillSend = true;
+
         if (message.getType() == MessageType.REQUEST) {
-            // TODO: сделать listeners и проверку по всем ним
-            waitAcceptList.add(new Message(MessageType.RESPONSE, message.getStatus(), message.getData()));
+            Message waiterMessage = new Message(MessageType.RESPONSE, message.getStatus(), message.getData());
+            if (!waitReceiveList.contains(waiterMessage)) {
+                waitReceiveList.add(new Pair<>(waiterMessage, willDoFuture));
+            } else {
+                itWillSend = false;
+            }
         }
-        waitSendQueue.add(message);
+        if (!waitSendQueue.contains(message) && itWillSend) {
+            waitSendQueue.add(message);
+        }
     }
+
+    public Queue<Message> getWaitSendQueue() {
+        return waitSendQueue;
+    }
+
+    public WaitReceiveMessageList getWaitReceiveList() {
+        return waitReceiveList;
+    }
+
 }

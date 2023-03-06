@@ -9,7 +9,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
 import ru.kpfu.itis.shkalin.simplifytorrent.AppContext;
 import ru.kpfu.itis.shkalin.simplifytorrent.dto.LocalFileInfoDTO;
-import ru.kpfu.itis.shkalin.simplifytorrent.protocol.ClientException;
+import ru.kpfu.itis.shkalin.simplifytorrent.protocol.exception.ClientException;
 import ru.kpfu.itis.shkalin.simplifytorrent.service.LocalFileService;
 import ru.kpfu.itis.shkalin.simplifytorrent.service.UploadService;
 
@@ -29,7 +29,7 @@ public class LocalFilesTabController {
     public VBox localFilesVBox;
 
     @FXML
-    public void initialize() throws ClientException {
+    public void initialize() {
         localFilesData =
                 ((LocalFileService) AppContext.getInstance().get("localFileService"))
                         .getLocalFilesList();
@@ -42,7 +42,7 @@ public class LocalFilesTabController {
             public void changed(ObservableValue<? extends LocalFileInfoDTO> observable, LocalFileInfoDTO oldValue, LocalFileInfoDTO newValue) {
                 if (localFilesListView.getSelectionModel().getSelectedItem() != null) {
                     localFilesItemTitle.setText(localFilesListView.getSelectionModel().getSelectedItem().getTitle());
-                    localFilesItemSize.setText(localFilesListView.getSelectionModel().getSelectedItem().getFileSizeBytes().toString());
+                    localFilesItemSize.setText(localFilesListView.getSelectionModel().getSelectedItem().getFileLength().toString());
                     localFilesVBox.visibleProperty().set(true);
                 } else {
                     localFilesVBox.visibleProperty().set(false);
@@ -52,8 +52,8 @@ public class LocalFilesTabController {
     }
 
     @FXML
-    public void uploadButtonClicked() throws ClientException {
-        System.out.println("User Files Tab: UPLOAD button clicked");
+    public void uploadButtonClicked() {
+        System.out.println("\nUser Files Tab: UPLOAD button clicked");
         List<LocalFileInfoDTO> additionalFilesList =
                 ((LocalFileService) AppContext.getInstance().get("localFileService"))
                         .addFiles();
@@ -66,9 +66,9 @@ public class LocalFilesTabController {
 
     @FXML
     public void deleteButtonClicked() {
-        System.out.println("User Files Tab: DELETE button clicked");
+        System.out.println("\nUser Files Tab: DELETE button clicked");
         ((LocalFileService) AppContext.getInstance().get("localFileService"))
-                .delete(localFilesListView.getSelectionModel().getSelectedItem().getFileHash());
+                .delete(localFilesListView.getSelectionModel().getSelectedItem().getHashMD5());
     }
 
     public LocalFilesTabController() {

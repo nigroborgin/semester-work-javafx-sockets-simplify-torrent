@@ -1,8 +1,5 @@
 package ru.kpfu.itis.shkalin.simplifytorrent.controller;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -12,23 +9,20 @@ import ru.kpfu.itis.shkalin.simplifytorrent.AppContext;
 import ru.kpfu.itis.shkalin.simplifytorrent.dto.LocalFileInfoDTO;
 import ru.kpfu.itis.shkalin.simplifytorrent.dto.MinFileInfoDTO;
 
-import ru.kpfu.itis.shkalin.simplifytorrent.entity.Catalog;
-import ru.kpfu.itis.shkalin.simplifytorrent.entity.Info;
-import ru.kpfu.itis.shkalin.simplifytorrent.protocol.ClientException;
+import ru.kpfu.itis.shkalin.simplifytorrent.protocol.exception.ClientException;
 import ru.kpfu.itis.shkalin.simplifytorrent.protocol.message.exception.CheckStatusMessageException;
 import ru.kpfu.itis.shkalin.simplifytorrent.protocol.message.exception.MessageException;
 
 import ru.kpfu.itis.shkalin.simplifytorrent.service.DownloadService;
 import ru.kpfu.itis.shkalin.simplifytorrent.service.LocalFileService;
 import ru.kpfu.itis.shkalin.simplifytorrent.service.UploadService;
-import ru.kpfu.itis.shkalin.simplifytorrent.service.converter.ConverterService;
 
 import java.io.IOException;
 import java.util.List;
 
 public class CatalogTabController {
 
-    public ObservableList<MinFileInfoDTO> catalogFilesData = FXCollections.observableArrayList();
+    public volatile ObservableList<MinFileInfoDTO> catalogFilesData;
 
     @FXML
     public ListView<MinFileInfoDTO> catalogListView;
@@ -43,33 +37,20 @@ public class CatalogTabController {
 
     @FXML
     public void initialize() {
-        try {
-            updateCatalog();
-        } catch (ClientException e) {
-            e.printStackTrace();
-        } catch (CheckStatusMessageException e) {
-            handleCheckMessageStatus(e);
-        } catch (MessageException e) {
-            catalogItemStatus.setText("Error: unknown message");
-        }
+        catalogFilesData = AppContext.getInstance().catalogFilesData;
+        updateCatalog();
 
         catalogListView.setItems(catalogFilesData);
-        catalogListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<>() {
-            @Override
-            public void changed(ObservableValue<? extends MinFileInfoDTO> observable, MinFileInfoDTO oldValue, MinFileInfoDTO newValue) {
-                catalogItemTitle.setText(catalogListView.getSelectionModel().getSelectedItem().getTitle());
-                catalogItemSize.setText(catalogListView.getSelectionModel().getSelectedItem().getFileLength().toString());
-                catalogVBox.visibleProperty().set(true);
-            }
+        catalogListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            catalogItemTitle.setText(catalogListView.getSelectionModel().getSelectedItem().getTitle());
+            catalogItemSize.setText(catalogListView.getSelectionModel().getSelectedItem().getFileLength().toString());
+            catalogVBox.visibleProperty().set(true);
         });
     }
 
-
-
     @FXML
     public void downloadButtonClicked() {
-        System.out.println("Catalog Tab: DOWNLOAD button clicked");
-        // TODO: visible downloading
+        System.out.println("\nCatalog Tab: DOWNLOAD button clicked");
         try {
             ((DownloadService) AppContext.getInstance().get("downloadService"))
                     .downloadFile(catalogListView.getSelectionModel().getSelectedItem().getHashMD5());
@@ -85,8 +66,8 @@ public class CatalogTabController {
     }
 
     @FXML
-    public void uploadButtonClicked() throws ClientException {
-        System.out.println("Catalog Tab: UPLOAD button clicked");
+    public void uploadButtonClicked() {
+        System.out.println("\nCatalog Tab: UPLOAD button clicked");
         List<LocalFileInfoDTO> additionalFilesList =
                 ((LocalFileService) AppContext.getInstance().get("localFileService"))
                         .addFiles();
@@ -97,46 +78,17 @@ public class CatalogTabController {
 
     @FXML
     public void updateCatalogButtonClicked() {
-        try {
-            updateCatalog();
-        } catch (ClientException e) {
-            e.printStackTrace();
-        } catch (CheckStatusMessageException e) {
-            handleCheckMessageStatus(e);
-        } catch (MessageException e) {
-            catalogItemStatus.setText("Error: unknown message");
-        }
+        System.out.println("\nCatalog Tab: UPDATE button clicked");
+        updateCatalog();
     }
 
     public CatalogTabController() {
 
     }
 
-    private void updateCatalog() throws ClientException, MessageException {
-        Catalog catalog = ((DownloadService) AppContext.getInstance().get("downloadService"))
+    private void updateCatalog() {
+        ((DownloadService) AppContext.getInstance().get("downloadService"))
                 .downloadCatalog();
-        ConverterService converter = (ConverterService) AppContext.getInstance().get("converterService");
-
-        Object[] keysOfDownloadedCatalog = catalog.keySet().toArray();
-        boolean isEqual;
-
-        for (Object catalogKey : keysOfDownloadedCatalog) {
-            isEqual = false;
-
-            for (MinFileInfoDTO dto : catalogFilesData) {
-
-                if (catalogKey.toString().equals(dto.getHashMD5())) {
-                    isEqual = true;
-                    break;
-                }
-            }
-            if (!isEqual) {
-                MinFileInfoDTO newDto = new MinFileInfoDTO();
-                Info info = catalog.get(catalogKey.toString());
-                converter.update(info, newDto);
-                catalogFilesData.add(newDto);
-            }
-        }
     }
 
     private void handleCheckMessageStatus(CheckStatusMessageException e) {

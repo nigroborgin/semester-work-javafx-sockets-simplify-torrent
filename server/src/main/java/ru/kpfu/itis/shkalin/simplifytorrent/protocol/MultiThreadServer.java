@@ -1,10 +1,9 @@
 package ru.kpfu.itis.shkalin.simplifytorrent.protocol;
 
 
-import ru.kpfu.itis.shkalin.simplifytorrent.entity.ServerCatalog;
+import ru.kpfu.itis.shkalin.simplifytorrent.structure.ServerCatalog;
 import ru.kpfu.itis.shkalin.simplifytorrent.exception.ServerException;
 import ru.kpfu.itis.shkalin.simplifytorrent.protocol.message.Message;
-import ru.kpfu.itis.shkalin.simplifytorrent.protocol.message.MessageManager;
 
 import java.io.IOException;
 import java.net.ServerSocket;

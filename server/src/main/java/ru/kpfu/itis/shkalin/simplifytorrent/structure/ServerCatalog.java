@@ -1,10 +1,9 @@
-package ru.kpfu.itis.shkalin.simplifytorrent.entity;
+package ru.kpfu.itis.shkalin.simplifytorrent.structure;
 
-import ru.kpfu.itis.shkalin.simplifytorrent.protocol.ClientHandler;
+import ru.kpfu.itis.shkalin.simplifytorrent.entity.Info;
 import ru.kpfu.itis.shkalin.simplifytorrent.protocol.Connection;
 
 import java.io.Serializable;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

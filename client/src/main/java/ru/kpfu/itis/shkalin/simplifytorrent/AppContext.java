@@ -1,7 +1,10 @@
 package ru.kpfu.itis.shkalin.simplifytorrent;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import ru.kpfu.itis.shkalin.simplifytorrent.dto.MinFileInfoDTO;
 import ru.kpfu.itis.shkalin.simplifytorrent.protocol.Client;
-import ru.kpfu.itis.shkalin.simplifytorrent.protocol.ClientException;
+import ru.kpfu.itis.shkalin.simplifytorrent.protocol.exception.ClientException;
 import ru.kpfu.itis.shkalin.simplifytorrent.protocol.message.CheckMessageHelper;
 import ru.kpfu.itis.shkalin.simplifytorrent.service.DownloadService;
 import ru.kpfu.itis.shkalin.simplifytorrent.service.LocalFileService;
@@ -16,6 +19,7 @@ import java.util.HashMap;
 public class AppContext extends HashMap<String, Object> {
 
     private static volatile AppContext instance;
+    public volatile ObservableList<MinFileInfoDTO> catalogFilesData;
 
     private AppContext(){
 
@@ -35,21 +39,18 @@ public class AppContext extends HashMap<String, Object> {
     }
 
     public void init() throws UnknownHostException, ClientException {
+        catalogFilesData = FXCollections.observableArrayList();
 
         // TODO: delete hardcode
         Client client = new Client(InetAddress.getByName("127.0.0.1"), 1234);
         client.startClient();
-
         instance.put("client", client);
 
-        CheckMessageHelper checker = new CheckMessageHelper();
-        instance.put("checkMessageHelper", checker);
+        instance.put("checkMessageHelper", new CheckMessageHelper());
 
-        PiecesService piecesService = new PiecesService();
-        instance.put("piecesService", piecesService);
+        instance.put("piecesService", new PiecesService());
         instance.put("converterService", new ConverterServiceImpl());
-        LocalFileService localFileService = new LocalFileService();
-        instance.put("localFileService", localFileService);
+        instance.put("localFileService", new LocalFileService());
         instance.put("downloadService", new DownloadService(client));
         instance.put("uploadService", new UploadService(client));
     }

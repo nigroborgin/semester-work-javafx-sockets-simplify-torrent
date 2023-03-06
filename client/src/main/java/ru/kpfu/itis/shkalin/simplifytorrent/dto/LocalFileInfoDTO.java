@@ -4,28 +4,28 @@ import java.util.Objects;
 
 public class LocalFileInfoDTO {
 
-    private String fileHash;
+    private String hashMD5;
     private String title;
-    private Long fileSizeBytes;
+    private Long fileLength;
     private String fileLocalPath;
 
     public LocalFileInfoDTO() {
 
     }
 
-    public LocalFileInfoDTO(String fileHash, String title, Long fileSizeBytes, String fileLocalPath) {
-        this.fileHash = fileHash;
+    public LocalFileInfoDTO(String hashMD5, String title, Long fileLength, String fileLocalPath) {
+        this.hashMD5 = hashMD5;
         this.title = title;
-        this.fileSizeBytes = fileSizeBytes;
+        this.fileLength = fileLength;
         this.fileLocalPath = fileLocalPath;
     }
 
-    public String getFileHash() {
-        return fileHash;
+    public String getHashMD5() {
+        return hashMD5;
     }
 
-    public void setFileHash(String fileHash) {
-        this.fileHash = fileHash;
+    public void setHashMD5(String hashMD5) {
+        this.hashMD5 = hashMD5;
     }
 
     public String getTitle() {
@@ -36,12 +36,12 @@ public class LocalFileInfoDTO {
         this.title = title;
     }
 
-    public Long getFileSizeBytes() {
-        return fileSizeBytes;
+    public Long getFileLength() {
+        return fileLength;
     }
 
-    public void setFileSizeBytes(Long fileSizeBytes) {
-        this.fileSizeBytes = fileSizeBytes;
+    public void setFileLength(Long fileLength) {
+        this.fileLength = fileLength;
     }
 
     public String getFileLocalPath() {
@@ -57,12 +57,12 @@ public class LocalFileInfoDTO {
         if (this == o) return true;
         if (!(o instanceof LocalFileInfoDTO)) return false;
         LocalFileInfoDTO that = (LocalFileInfoDTO) o;
-        return Objects.equals(fileHash, that.fileHash) && Objects.equals(title, that.title) && Objects.equals(fileSizeBytes, that.fileSizeBytes) && Objects.equals(fileLocalPath, that.fileLocalPath);
+        return Objects.equals(hashMD5, that.hashMD5) && Objects.equals(title, that.title) && Objects.equals(fileLength, that.fileLength) && Objects.equals(fileLocalPath, that.fileLocalPath);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(fileHash, title, fileSizeBytes, fileLocalPath);
+        return Objects.hash(hashMD5, title, fileLength, fileLocalPath);
     }
 
     @Override

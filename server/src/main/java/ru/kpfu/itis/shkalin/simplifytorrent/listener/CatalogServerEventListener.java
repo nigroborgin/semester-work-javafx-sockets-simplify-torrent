@@ -2,7 +2,7 @@ package ru.kpfu.itis.shkalin.simplifytorrent.listener;
 
 import ru.kpfu.itis.shkalin.simplifytorrent.entity.Info;
 import ru.kpfu.itis.shkalin.simplifytorrent.protocol.Connection;
-import ru.kpfu.itis.shkalin.simplifytorrent.entity.Catalog;
+import ru.kpfu.itis.shkalin.simplifytorrent.structure.Catalog;
 import ru.kpfu.itis.shkalin.simplifytorrent.exception.ServerEventListenerException;
 import ru.kpfu.itis.shkalin.simplifytorrent.exception.ServerException;
 import ru.kpfu.itis.shkalin.simplifytorrent.protocol.MultiThreadServer;

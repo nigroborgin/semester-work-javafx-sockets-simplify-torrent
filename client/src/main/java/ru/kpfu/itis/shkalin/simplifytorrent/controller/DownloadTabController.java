@@ -12,7 +12,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import ru.kpfu.itis.shkalin.simplifytorrent.AppContext;
 import ru.kpfu.itis.shkalin.simplifytorrent.dto.DownloadingFileInfoDTO;
 import ru.kpfu.itis.shkalin.simplifytorrent.dto.LocalFileInfoDTO;
-import ru.kpfu.itis.shkalin.simplifytorrent.protocol.ClientException;
+import ru.kpfu.itis.shkalin.simplifytorrent.protocol.exception.ClientException;
 import ru.kpfu.itis.shkalin.simplifytorrent.service.LocalFileService;
 import ru.kpfu.itis.shkalin.simplifytorrent.service.UploadService;
 
@@ -68,8 +68,8 @@ public class DownloadTabController {
     }
 
     @FXML
-    public void uploadButtonClicked() throws ClientException {
-        System.out.println("Download Tab: UPLOAD button clicked");
+    public void uploadButtonClicked() {
+        System.out.println("\nDownload Tab: UPLOAD button clicked");
         List<LocalFileInfoDTO> additionalFilesList =
                 ((LocalFileService) AppContext.getInstance().get("localFileService"))
                         .addFiles();
@@ -80,22 +80,22 @@ public class DownloadTabController {
 
     @FXML
     private void playButtonClicked() {
-        System.out.println("Download Tab: PLAY button clicked");
+        System.out.println("\nDownload Tab: PLAY button clicked");
     }
 
     @FXML
     private void pauseButtonClicked() {
-        System.out.println("Download Tab: PAUSE button clicked");
+        System.out.println("\nDownload Tab: PAUSE button clicked");
     }
 
     @FXML
     private void stopButtonClicked() {
-        System.out.println("Download Tab: STOP button clicked");
+        System.out.println("\nDownload Tab: STOP button clicked");
     }
 
     @FXML
     public void deleteButtonClicked() {
-        System.out.println("Download Tab: DELETE button clicked");
+        System.out.println("\nDownload Tab: DELETE button clicked");
     }
 
     public DownloadTabController() {

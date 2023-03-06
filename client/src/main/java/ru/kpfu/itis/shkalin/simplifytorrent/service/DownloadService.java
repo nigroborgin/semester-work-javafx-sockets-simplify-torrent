@@ -1,16 +1,16 @@
 package ru.kpfu.itis.shkalin.simplifytorrent.service;
 
 import ru.kpfu.itis.shkalin.simplifytorrent.AppContext;
-import ru.kpfu.itis.shkalin.simplifytorrent.entity.Catalog;
+import ru.kpfu.itis.shkalin.simplifytorrent.structure.Catalog;
 import ru.kpfu.itis.shkalin.simplifytorrent.entity.Info;
 import ru.kpfu.itis.shkalin.simplifytorrent.entity.Piece;
-import ru.kpfu.itis.shkalin.simplifytorrent.protocol.message.CheckMessageHelper;
 import ru.kpfu.itis.shkalin.simplifytorrent.protocol.Client;
-import ru.kpfu.itis.shkalin.simplifytorrent.protocol.ClientException;
+import ru.kpfu.itis.shkalin.simplifytorrent.protocol.exception.ClientException;
 import ru.kpfu.itis.shkalin.simplifytorrent.protocol.message.Message;
 import ru.kpfu.itis.shkalin.simplifytorrent.protocol.message.exception.MessageException;
 import ru.kpfu.itis.shkalin.simplifytorrent.protocol.message.fields.MessageStatus;
 import ru.kpfu.itis.shkalin.simplifytorrent.protocol.message.fields.MessageType;
+import ru.kpfu.itis.shkalin.simplifytorrent.structure.DoFuture;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -23,62 +23,64 @@ public class DownloadService {
     }
 
     public void downloadFile(String hashMD5) throws ClientException, MessageException, IOException {
-        Info fileInfo = downloadInfo(hashMD5);
-        RandomAccessFile file =
-                ((PiecesService) AppContext.getInstance().get("piecesService"))
-                .createFile(fileInfo);
-        downloading(fileInfo, file);
+
+        DoFuture<Info> infoWillDoFuture =
+                (Info info) -> {
+                    RandomAccessFile file = null;
+                    try {
+                        file = ((PiecesService) AppContext.getInstance().get("piecesService"))
+                                .createFile(info);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    long countPieces = info.getFileLength() / info.getPieceLength();
+                    if (info.getFileLength() % info.getPieceLength() != 0) {
+                        countPieces++;
+                    }
+
+                    for (long idPiece = 0; idPiece < countPieces; idPiece++) {
+                        RandomAccessFile finalFile = file;
+                        DoFuture<Piece> pieceWillDoFuture =
+                                (Piece piece) -> {
+                                    try {
+                                        assert finalFile != null;
+                                        ((PiecesService) AppContext.getInstance().get("piecesService"))
+                                                .putPieceInFile(piece, finalFile);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                };
+                        downloadPiece(info.getHashMD5(), idPiece, pieceWillDoFuture);
+                    }
+                };
+        downloadInfo(hashMD5, infoWillDoFuture);
     }
 
-    private void downloading(Info fileInfo, RandomAccessFile file) throws ClientException, MessageException, IOException {
-        long countPieces = fileInfo.getFileLength() / fileInfo.getPieceLength();
-        if (fileInfo.getFileLength() % fileInfo.getPieceLength() != 0) {
-            countPieces++;
-        }
-        PiecesService piecesService = (PiecesService) AppContext.getInstance().get("piecesService");
-        for (long idPiece = 0; idPiece < countPieces; idPiece++) {
-            Piece piece = downloadPiece(fileInfo.getHashMD5(), idPiece);
-            piecesService.putPieceInFile(piece, file);
-        }
-    }
+    public void downloadInfo(String hashMD5, DoFuture<Info> willDoFuture) {
 
-    public Info downloadInfo(String hashMD5) throws ClientException, MessageException {
-
-        Info fileInfo;
         Message downloadInfoMessage = new Message(MessageType.REQUEST, MessageStatus.OK, new Info(hashMD5));
-        client.addForSend(downloadInfoMessage);
-        Message fullFileInfoMessage = client.addForAccept();
-        fileInfo = (Info)
-                ((CheckMessageHelper) AppContext.getInstance().get("checkMessageHelper"))
-                .checkMessageAndGetData(fullFileInfoMessage, MessageType.RESPONSE);
+        client.send(downloadInfoMessage, willDoFuture);
 
-        return fileInfo;
     }
 
-    public Piece downloadPiece(String hashMD5, long id) throws ClientException, MessageException {
+    public void downloadPiece(String hashMD5, long id, DoFuture<Piece> willDoFuture) {
 
-        Piece piece;
         Message downloadPieceMessage = new Message(MessageType.REQUEST, MessageStatus.OK, new Piece(hashMD5, id));
-        client.addForSend(downloadPieceMessage);
-        Message pieceMessage = client.addForAccept();
-        piece = (Piece)
-                ((CheckMessageHelper) AppContext.getInstance().get("checkMessageHelper"))
-                .checkMessageAndGetData(pieceMessage, MessageType.RESPONSE);
+        client.send(downloadPieceMessage, willDoFuture);
 
-        return piece;
     }
 
-    public Catalog downloadCatalog() throws ClientException, MessageException {
-
-        Catalog catalog;
+    public void downloadCatalog() {
 
         Message downloadCatalogMessage = new Message(MessageType.REQUEST, MessageStatus.OK, new Catalog());
-        client.addForSend(downloadCatalogMessage);
-        Message catalogMessage = client.addForAccept();
-        catalog = (Catalog)
-                ((CheckMessageHelper) AppContext.getInstance().get("checkMessageHelper"))
-                .checkMessageAndGetData(catalogMessage, MessageType.RESPONSE);
 
-        return catalog;
+        DoFuture<Catalog> catalogWillDoFuture =
+                (Catalog catalog) -> ((LocalFileService) AppContext.getInstance().get("localFileService"))
+                        .updateServerCatalog(catalog);
+
+        client.send(downloadCatalogMessage, catalogWillDoFuture);
+
     }
+
+
 }

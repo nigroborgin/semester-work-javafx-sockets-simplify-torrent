@@ -3,7 +3,7 @@ package ru.kpfu.itis.shkalin.simplifytorrent.service;
 import javafx.collections.ObservableList;
 import ru.kpfu.itis.shkalin.simplifytorrent.AppContext;
 import ru.kpfu.itis.shkalin.simplifytorrent.dto.LocalFileInfoDTO;
-import ru.kpfu.itis.shkalin.simplifytorrent.entity.Catalog;
+import ru.kpfu.itis.shkalin.simplifytorrent.structure.Catalog;
 import ru.kpfu.itis.shkalin.simplifytorrent.entity.Info;
 import ru.kpfu.itis.shkalin.simplifytorrent.entity.Piece;
 import ru.kpfu.itis.shkalin.simplifytorrent.protocol.Client;
@@ -23,7 +23,7 @@ public class UploadService {
 
     public void uploadInfo(String hashMD5) {
         Message message = new Message(MessageType.RESPONSE, MessageStatus.OK, getFullInfoByHash(hashMD5));
-        client.addForSend(message);
+        client.send(message, null);
     }
 
     public void uploadPiece(String hashMD5, long id) throws IOException {
@@ -31,22 +31,22 @@ public class UploadService {
                 ((PiecesService) AppContext.getInstance().get("piecesService"))
                 .getPiece(hashMD5, id);
         Message message = new Message(MessageType.RESPONSE, MessageStatus.OK, piece);
-        client.addForSend(message);
+        client.send(message, null);
     }
 
     public void uploadCatalog(List<LocalFileInfoDTO> localFilesList) {
         Catalog catalog = new Catalog();
 
         for (LocalFileInfoDTO dto : localFilesList) {
-            String hashMD5 = dto.getFileHash();
+            String hashMD5 = dto.getHashMD5();
             String title = dto.getTitle();
-            Long fileLength = dto.getFileSizeBytes();
+            Long fileLength = dto.getFileLength();
             Integer pieceLength = PiecesService.PIECE_SIZE;
 
             catalog.put(hashMD5, new Info(hashMD5, pieceLength, fileLength, title));
         }
         Message message = new Message(MessageType.RESPONSE, MessageStatus.OK, catalog);
-        client.addForSend(message);
+        client.send(message, null);
     }
 
     public void uploadCatalog() {
@@ -56,13 +56,13 @@ public class UploadService {
                 .getLocalFilesList();
 
         for (LocalFileInfoDTO dto : localFilesList) {
-            String hashMD5 = dto.getFileHash();
+            String hashMD5 = dto.getHashMD5();
             Info fullInfoByHash = getFullInfoByHash(hashMD5);
             catalog.put(hashMD5, fullInfoByHash);
         }
 
         Message message = new Message(MessageType.RESPONSE, MessageStatus.OK, catalog);
-        client.addForSend(message);
+        client.send(message, null);
     }
 
     public Info getFullInfoByHash(String hashMD5) {
@@ -72,7 +72,7 @@ public class UploadService {
                 .get(hashMD5);
 
         String title = localFileInfoDTO.getTitle();
-        Long fileLength = localFileInfoDTO.getFileSizeBytes();
+        Long fileLength = localFileInfoDTO.getFileLength();
         Integer pieceLength = PiecesService.PIECE_SIZE;
 
         return new Info(hashMD5, pieceLength, fileLength, title);
